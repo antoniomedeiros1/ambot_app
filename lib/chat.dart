@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:sound_stream/sound_stream.dart';
 import 'package:dialogflow_grpc/dialogflow_grpc.dart';
 import 'package:dialogflow_grpc/generated/google/cloud/dialogflow/v2beta1/session.pb.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class Chat extends StatefulWidget {
   Chat({Key? key}) : super(key: key);
@@ -16,7 +17,8 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
-
+  final FlutterTts flutterTts = FlutterTts();
+  
   bool _isRecording = false;
 
   RecorderStream _recorder = RecorderStream();
@@ -66,6 +68,10 @@ class _ChatState extends State<Chat> {
     await _audioStream.close();
   }
 
+  Future botspeak(String resposta) async {
+    await flutterTts.speak(resposta);
+  }
+  
   void handleSubmitted(text) async {
     print(text);
     _textController.clear();
@@ -149,7 +155,7 @@ class _ChatState extends State<Chat> {
 
           ChatMessage botMessage = new ChatMessage(
             text: fulfillmentText,
-            name: "Bot",
+            name: "AmBot",
             type: false,
           );
 
