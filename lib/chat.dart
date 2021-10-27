@@ -162,6 +162,8 @@ class _ChatState extends State<Chat> {
           _messages.insert(0, message);
           _textController.clear();
           _messages.insert(0, botMessage);
+          
+          speak(fulfillmentText);
 
         }
         if(transcript.isNotEmpty) {
