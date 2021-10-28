@@ -1,6 +1,6 @@
 {
-    "name": "voice_bot",
-    "short_name": "voice_bot",
+    "name": "ambot_app",
+    "short_name": "ambot_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

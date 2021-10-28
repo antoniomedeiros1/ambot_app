@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "voice_bot")
-set(APPLICATION_ID "com.example.voice_bot")
+set(BINARY_NAME "ambot_app")
+set(APPLICATION_ID "com.example.ambot_app")
 
 cmake_policy(SET CMP0063 NEW)
 

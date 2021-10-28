@@ -21,7 +21,7 @@ class _ChatState extends State<Chat> {
   
   bool _isRecording = false;
 
-  RecorderStream _recorder = RecorderStream();
+  final RecorderStream _recorder = RecorderStream();
   late StreamSubscription _recorderStatus;
   late StreamSubscription<List<int>> _audioStreamSubscription;
   late BehaviorSubject<List<int>> _audioStream;
@@ -147,13 +147,13 @@ class _ChatState extends State<Chat> {
 
         if(fulfillmentText.isNotEmpty) {
 
-          ChatMessage message = new ChatMessage(
+          ChatMessage message = ChatMessage(
             text: queryText,
             name: "You",
             type: true,
           );
 
-          ChatMessage botMessage = new ChatMessage(
+          ChatMessage botMessage = ChatMessage(
             text: fulfillmentText,
             name: "AmBot",
             type: false,
@@ -163,7 +163,7 @@ class _ChatState extends State<Chat> {
           _textController.clear();
           _messages.insert(0, botMessage);
           
-          speak(fulfillmentText);
+          botspeak(fulfillmentText);
 
         }
         if(transcript.isNotEmpty) {
