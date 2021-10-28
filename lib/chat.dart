@@ -233,10 +233,10 @@ class ChatMessage extends StatelessWidget {
       new Container(
         margin: const EdgeInsets.only(right: 16.0),
         child: CircleAvatar(
-          radius: (52),
+          radius: (32),
           backgroundColor: Colors.white,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(50),
+            borderRadius: BorderRadius.circular(30),
             child: Image.asset('assets/images/stockrobot.png'),
           ),
         ),
