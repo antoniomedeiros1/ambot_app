@@ -18,9 +18,10 @@ _Este é o repositório oficial do AmBot, você pode encontrar as orientações 
 * Dart
 * Android Studio
 * Flutter
-
+* Celular Adroid (para testar com o .apk)
 ### Instruções de instalação e execução
-
+Para executar o app basta utilizar o comando <flutter run --no-sound-null-safety> no terminal no diretório do projeto. Caso seja executado utilizando o emulador do Android Studio, é necessário ativar o microfone do emulador para utilizar os recursos de interação por voz. 
+Também é possível testar o app instalando o .apk (anexado no projeto do Taikai).
 ## Equipe
 * Alexandre Vitor Silva Braga [(GitHub)](https://github.com/alexandre-braga)
 
