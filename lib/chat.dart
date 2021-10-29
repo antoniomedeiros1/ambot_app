@@ -17,7 +17,10 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
+  final TextEditingController _SENHAtextController = TextEditingController();
   final FlutterTts flutterTts = FlutterTts();
+  //senha placeholder
+  String password = '';
 
   bool _isRecording = false;
 
@@ -67,6 +70,29 @@ class _ChatState extends State<Chat> {
 
   Future botspeak(String resposta) async {
     await flutterTts.speak(resposta);
+  }
+
+  Widget insereTexto() {
+    if (password == 'senha') {
+      return TextField(
+        controller: _textController,
+        onSubmitted: handleSubmitted,
+        decoration: InputDecoration.collapsed(hintText: "Send a message"),
+      );
+    } else {
+      return TextField(
+        controller: _SENHAtextController,
+        onSubmitted: autentica,
+        decoration: InputDecoration.collapsed(hintText: "Digite a Senha"),
+      );
+    }
+  }
+
+  void autentica(text) async {
+    //senha placeholder
+    print(text);
+    password = _SENHAtextController.text;
+    _SENHAtextController.clear();
   }
 
   void handleSubmitted(text) async {
@@ -167,6 +193,13 @@ class _ChatState extends State<Chat> {
     });
   }
 
+  void executa(textsubmit, textsenha) async {
+    handleSubmitted(textsubmit);
+    if (password != 'senha') {
+      autentica(textsenha);
+    }
+  }
+
   // The chat interface
   //
   //------------------------------------------------------------------------------------
@@ -190,18 +223,14 @@ class _ChatState extends State<Chat> {
               child: Row(
                 children: <Widget>[
                   Flexible(
-                    child: TextField(
-                      controller: _textController,
-                      onSubmitted: handleSubmitted,
-                      decoration:
-                          InputDecoration.collapsed(hintText: "Send a message"),
-                    ),
+                    child: insereTexto(),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 4.0),
                     child: IconButton(
                       icon: Icon(Icons.send),
-                      onPressed: () => handleSubmitted(_textController.text),
+                      onPressed: () => executa(
+                          _textController.text, _SENHAtextController.text),
                     ),
                   ),
                   IconButton(
