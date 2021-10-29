@@ -24,6 +24,7 @@ _Este é o repositório oficial do AmBot, você pode encontrar as orientações 
 * [sound_stream](https://pub.dev/packages/sound_stream)
 * [dialogflow_grpc](https://pub.dev/packages/dialogflow_grpc)
 * [flutter_tts](https://pub.dev/packages/flutter_tts)
+
 Para instalar as dependências bastar utilizar o comando `flutter pub get` 
 ### Instruções de instalação e execução
 Para executar o app basta utilizar o comando `flutter run --no-sound-null-safety` no terminal no diretório do projeto. Caso seja executado utilizando o emulador do Android Studio, é necessário ativar o microfone do emulador para utilizar os recursos de interação por voz. 
