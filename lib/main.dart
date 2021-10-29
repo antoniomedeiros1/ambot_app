@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'AmBot',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.orange,
       ),
       home: const MyHomePage(title: 'AmBot'),
     );
@@ -30,12 +30,23 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Chat(),
-      )
-    );
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: SafeArea(
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: Image.asset(
+                  'assets/images/ambotLogobeer.jpeg',
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Center(
+                child: Chat(),
+              ),
+            ],
+          ),
+        ));
   }
 }

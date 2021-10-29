@@ -17,8 +17,11 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
+  final TextEditingController _SENHAtextController = TextEditingController();
   final FlutterTts flutterTts = FlutterTts();
-  
+  //senha placeholder
+  String password = '';
+
   bool _isRecording = false;
 
   final RecorderStream _recorder = RecorderStream();
@@ -50,16 +53,13 @@ class _ChatState extends State<Chat> {
         });
     });
 
-    await Future.wait([
-      _recorder.initialize()
-    ]);
+    await Future.wait([_recorder.initialize()]);
 
     // Get a Service account
     final serviceAccount = ServiceAccount.fromString(
         '${(await rootBundle.loadString('assets/credentials.json'))}');
     // Create a DialogflowGrpc Instance
     dialogflow = DialogflowGrpcV2Beta1.viaServiceAccount(serviceAccount);
-
   }
 
   void stopStream() async {
@@ -71,24 +71,47 @@ class _ChatState extends State<Chat> {
   Future botspeak(String resposta) async {
     await flutterTts.speak(resposta);
   }
-  
+
+  Widget insereTexto() {
+    if (password == 'senha') {
+      return TextField(
+        controller: _textController,
+        onSubmitted: handleSubmitted,
+        decoration: InputDecoration.collapsed(hintText: "Send a message"),
+      );
+    } else {
+      return TextField(
+        controller: _SENHAtextController,
+        onSubmitted: autentica,
+        decoration: InputDecoration.collapsed(hintText: "Digite a Senha"),
+      );
+    }
+  }
+
+  void autentica(text) async {
+    //senha placeholder
+    print(text);
+    password = _SENHAtextController.text;
+    _SENHAtextController.clear();
+  }
+
   void handleSubmitted(text) async {
     print(text);
     _textController.clear();
 
     ChatMessage message = ChatMessage(
-     text: text,
-     name: "You",
-     type: true,
+      text: text,
+      name: "You",
+      type: true,
     );
 
     setState(() {
-     _messages.insert(0, message);
+      _messages.insert(0, message);
     });
-    
+
     DetectIntentResponse? data = await dialogflow?.detectIntent(text, 'pt-BR');
     String? fulfillmentText = data?.queryResult.fulfillmentText;
-    if(fulfillmentText != null) {
+    if (fulfillmentText != null) {
       ChatMessage botMessage = ChatMessage(
         text: fulfillmentText,
         name: "AmBot",
@@ -99,7 +122,6 @@ class _ChatState extends State<Chat> {
         _messages.insert(0, botMessage);
       });
     }
-
   }
 
   void handleStream() async {
@@ -111,30 +133,26 @@ class _ChatState extends State<Chat> {
       _audioStream.add(data);
     });
 
-
     // TODO Create SpeechContexts
     // Create an audio InputConfig
-    var biasList = SpeechContextV2Beta1(
-    phrases: [
+    var biasList = SpeechContextV2Beta1(phrases: [
       'Dialogflow CX',
       'Dialogflow Essentials',
       'Action Builder',
       'HIPAA'
-    ],
-    boost: 20.0
-    );
+    ], boost: 20.0);
 
-        // See: https://cloud.google.com/dialogflow/es/docs/reference/rpc/google.cloud.dialogflow.v2#google.cloud.dialogflow.v2.InputAudioConfig
+    // See: https://cloud.google.com/dialogflow/es/docs/reference/rpc/google.cloud.dialogflow.v2#google.cloud.dialogflow.v2.InputAudioConfig
     var config = InputConfigV2beta1(
         encoding: 'AUDIO_ENCODING_LINEAR_16',
         languageCode: 'pt-BR',
         sampleRateHertz: 16000,
         singleUtterance: false,
-        speechContexts: [biasList]
-    );
+        speechContexts: [biasList]);
 
     // TODO Make the streamingDetectIntent call, with the InputConfig and the audioStream
-    final responseStream = dialogflow?.streamingDetectIntent(config, _audioStream);
+    final responseStream =
+        dialogflow?.streamingDetectIntent(config, _audioStream);
     // TODO Get the transcript and detectedIntent and show on screen
     // Get the transcript and detectedIntent and show on screen
     responseStream?.listen((data) {
@@ -145,9 +163,8 @@ class _ChatState extends State<Chat> {
         String queryText = data.queryResult.queryText;
         String fulfillmentText = data.queryResult.fulfillmentText;
 
-        if(fulfillmentText.isNotEmpty) {
-
-          ChatMessage message = ChatMessage(
+        if (fulfillmentText.isNotEmpty) {
+          ChatMessage message = new ChatMessage(
             text: queryText,
             name: "You",
             type: true,
@@ -162,21 +179,25 @@ class _ChatState extends State<Chat> {
           _messages.insert(0, message);
           _textController.clear();
           _messages.insert(0, botMessage);
-          
-          botspeak(fulfillmentText);
 
+          botspeak(fulfillmentText);
         }
-        if(transcript.isNotEmpty) {
+        if (transcript.isNotEmpty) {
           _textController.text = transcript;
         }
-
       });
-        },onError: (e){
-          //print(e);
-        },onDone: () {
-          //print('done');
-        });
+    }, onError: (e) {
+      //print(e);
+    }, onDone: () {
+      //print('done');
+    });
+  }
 
+  void executa(textsubmit, textsenha) async {
+    handleSubmitted(textsubmit);
+    if (password != 'senha') {
+      autentica(textsenha);
+    }
   }
 
   // The chat interface
@@ -187,11 +208,11 @@ class _ChatState extends State<Chat> {
     return Column(children: <Widget>[
       Flexible(
           child: ListView.builder(
-            padding: EdgeInsets.all(8.0),
-            reverse: true,
-            itemBuilder: (_, int index) => _messages[index],
-            itemCount: _messages.length,
-          )),
+        padding: EdgeInsets.all(8.0),
+        reverse: true,
+        itemBuilder: (_, int index) => _messages[index],
+        itemCount: _messages.length,
+      )),
       Divider(height: 1.0),
       Container(
           decoration: BoxDecoration(color: Theme.of(context).cardColor),
@@ -202,17 +223,14 @@ class _ChatState extends State<Chat> {
               child: Row(
                 children: <Widget>[
                   Flexible(
-                    child: TextField(
-                      controller: _textController,
-                      onSubmitted: handleSubmitted,
-                      decoration: InputDecoration.collapsed(hintText: "Send a message"),
-                    ),
+                    child: insereTexto(),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 4.0),
                     child: IconButton(
                       icon: Icon(Icons.send),
-                      onPressed: () => handleSubmitted(_textController.text),
+                      onPressed: () => executa(
+                          _textController.text, _SENHAtextController.text),
                     ),
                   ),
                   IconButton(
@@ -223,12 +241,10 @@ class _ChatState extends State<Chat> {
                 ],
               ),
             ),
-          )
-      ),
+          )),
     ]);
   }
 }
-
 
 //------------------------------------------------------------------------------------
 // The chat message balloon
@@ -245,14 +261,20 @@ class ChatMessage extends StatelessWidget {
     return <Widget>[
       new Container(
         margin: const EdgeInsets.only(right: 16.0),
-        child: CircleAvatar(child: new Text('B')),
+        child: CircleAvatar(
+          radius: (32),
+          backgroundColor: Colors.white,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: Image.asset('assets/images/stockrobot.png'),
+          ),
+        ),
       ),
       new Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(this.name,
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(this.name, style: TextStyle(fontWeight: FontWeight.bold)),
             Container(
               margin: const EdgeInsets.only(top: 5.0),
               child: Text(text),
@@ -281,9 +303,9 @@ class ChatMessage extends StatelessWidget {
         margin: const EdgeInsets.only(left: 16.0),
         child: CircleAvatar(
             child: Text(
-              this.name[0],
-              style: TextStyle(fontWeight: FontWeight.bold),
-            )),
+          this.name[0],
+          style: TextStyle(fontWeight: FontWeight.bold),
+        )),
       ),
     ];
   }
@@ -291,7 +313,6 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: this.type ? myMessage(context) : otherMessage(context),
