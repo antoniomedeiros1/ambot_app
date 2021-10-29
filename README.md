@@ -5,6 +5,8 @@ Já pensou em ter um assistente virtual que te ajuda na realização de encomend
 
 O AmBot utiliza a API Google Dialogflow com integração à plataforma Google Cloud, e combina uma interface desenvolvida em Flutter e hospedagem no Firebase. 
 
+[Link da apresentação do projeto.](https://www.canva.com/design/DAEuIZvcNqs/-w-ZE0VRZmOe8zEXUHIosg/view?www.canva.com/design/DAEuIZvcNqs/-w-ZE0VRZmOe8zEXUHIosg/view?utm_content=DAEuIZvcNqs&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton)
+
 _Este é o repositório oficial do AmBot, você pode encontrar as orientações para executá-lo no seu computador pessoal logo abaixo._ 
 
 ## Informações técnicas
@@ -12,3 +14,16 @@ _Este é o repositório oficial do AmBot, você pode encontrar as orientações 
 ![Desenho de arquitetura](./ambot.drawio.svg)
 
 ### Pré-requisitos
+* Linux
+* Dart
+* Android Studio
+* Flutter
+
+### Instruções de instalação e execução
+
+## Equipe
+* Alexandre Vitor Silva Braga [(GitHub)](https://github.com/alexandre-braga)
+
+* Antônio José de Medeiros Filho [(GitHub)](https://github.com/antoniomedeiros1)
+
+* Caio Cedrola Rocha [(GitHub)](https://github.com/caiocrocha)
